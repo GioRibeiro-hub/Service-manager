@@ -8,9 +8,9 @@ app.use(cors());
 app.use(express.json());
 
 /*
-=====================================
+
 ROTA PARA CADASTRAR CLIENTE
-=====================================
+
 */
 app.post('/clientes', (req, res) => {
 
@@ -52,9 +52,9 @@ app.post('/clientes', (req, res) => {
 
 
 /*
-=====================================
+
 ROTA PARA LISTAR TODOS OS CLIENTES
-=====================================
+
 */
 app.get('/clientes', (req, res) => {
 
