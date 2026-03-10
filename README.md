@@ -23,7 +23,7 @@ Muitos profissionais utilizam planilhas, anotações ou mensagens para controlar
 * Cadastro de serviços
 * Vinculação de serviços a clientes
 
-## 🛠 Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 ### Front-end
 
