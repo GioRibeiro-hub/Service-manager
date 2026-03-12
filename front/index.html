@@ -20,13 +20,21 @@
 
         <form id="formCliente">
             <label for="nome">Nome Completo:</label>
-            <input type="text" id="nome" name="nome" required>
+            <input type="text" id="nome" name="nome" required placeholder="Ex: João da Silva">
 
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email" required placeholder="Ex: joao@email.com">
 
             <label for="telefone">Telefone:</label>
-            <input type="tel" id="telefone" name="telefone" required>
+            <input
+                type="tel"
+                id="telefone"
+                name="telefone"
+                required
+                placeholder="(11) 99999-9999"
+                pattern="\(?\d{2}\)?\s?\d{4,5}-?\d{4}"
+                title="Formato esperado: (11) 99999-9999"
+            >
 
             <input type="submit" value="Registrar">
         </form>
@@ -36,14 +44,14 @@
 
     <script>
         const form = document.getElementById("formCliente");
-        const mensagem = document.getElementById("mensagem")
+        const mensagem = document.getElementById("mensagem");
 
         form.addEventListener('submit', async function (event) {
 
             event.preventDefault();
 
-            const nome = document.getElementById("nome").value;
-            const email = document.getElementById("email").value;
+            const nome     = document.getElementById("nome").value;
+            const email    = document.getElementById("email").value;
             const telefone = document.getElementById("telefone").value;
 
             try {
@@ -67,12 +75,12 @@
                         mensagem.innerText = "";
                     }, 3000);
 
-                    form.reset(); // limpa os campos
+                    form.reset();
 
                 } else {
 
                     mensagem.innerText = data.error;
-                    mensagem.style.color = "red";
+                    mensagem.style.color = response.status === 409 ? "orange" : "red";
                 }
 
             } catch (error) {
@@ -81,8 +89,6 @@
                 mensagem.style.color = "red";
             }
         });
-
-
     </script>
 
 </body>

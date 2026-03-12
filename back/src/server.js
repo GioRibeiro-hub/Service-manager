@@ -1,77 +1,70 @@
 const express = require('express');
-const cors = require('cors');
-const connection = require('./database');
+const cors    = require('cors');
+const pool    = require('./database');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-/*
-
-ROTA PARA CADASTRAR CLIENTE
-
-*/
-app.post('/clientes', (req, res) => {
+app.post('/clientes', async (req, res) => {
 
     const { nome, email, telefone } = req.body;
 
-    const sql = `
-        INSERT INTO clientes (nome, email, telefone)
-        VALUES (?, ?, ?)
-    `;
+    // Validação dos campos
+    if (!nome?.trim() || !email?.trim() || !telefone?.trim()) {
+        return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
+    }
 
-    connection.query(sql, [nome, email, telefone], (err, result) => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({ error: 'Email inválido.' });
+    }
 
-        if (err) {
-            console.error('Erro ao inserir:', err);
-            return res.status(500).json({ error: 'Erro ao cadastrar cliente' });
+    try {
+        const sql = `
+            INSERT INTO clientes (nome, email, telefone)
+            VALUES (?, ?, ?)
+        `;
+
+        const [result] = await pool.query(sql, [nome.trim(), email.trim(), telefone.trim()]);
+
+        const [[cliente]] = await pool.query(
+            'SELECT * FROM clientes WHERE id = ?',
+            [result.insertId]
+        );
+
+        res.status(201).json({
+            message: 'Cliente cadastrado com sucesso!',
+            cliente,
+        });
+
+    } catch (err) {
+
+        // Email duplicado (UNIQUE constraint)
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ error: 'Este email já está cadastrado.' });
         }
 
-        const idInserido = result.insertId;
-
-        // Buscar o cliente recém inserido
-        connection.query(
-            "SELECT * FROM clientes WHERE id = ?",
-            [idInserido],
-            (err2, rows) => {
-
-                if (err2) {
-                    console.error('Erro ao buscar cliente:', err2);
-                    return res.status(500).json({ error: 'Erro ao buscar cliente' });
-                }
-
-                res.json({
-                    message: 'Cliente cadastrado com sucesso!',
-                    cliente: rows[0]
-                });
-            }
-        );
-    });
+        console.error('Erro ao cadastrar cliente:', err);
+        res.status(500).json({ error: 'Erro interno ao cadastrar cliente.' });
+    }
 });
 
 
-/*
+app.get('/clientes', async (req, res) => {
 
-ROTA PARA LISTAR TODOS OS CLIENTES
-
-*/
-app.get('/clientes', (req, res) => {
-
-    const sql = "SELECT * FROM clientes";
-
-    connection.query(sql, (err, rows) => {
-
-        if (err) {
-            console.error('Erro ao buscar clientes:', err);
-            return res.status(500).json({ error: 'Erro ao buscar clientes' });
-        }
+    try {
+        const [rows] = await pool.query('SELECT * FROM clientes ORDER BY nome ASC');
 
         res.json({
             total: rows.length,
-            clientes: rows
+            clientes: rows,
         });
-    });
+
+    } catch (err) {
+        console.error('Erro ao buscar clientes:', err);
+        res.status(500).json({ error: 'Erro interno ao buscar clientes.' });
+    }
 });
 
 
