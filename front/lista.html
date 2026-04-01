@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Manager - Serviços</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="page-lista">
+
+    <div class="dashboard">
+
+
+        <header class="dashboard-header">
+            <h1>Service Manager</h1>
+            <nav>
+                <a href="index.html" class="btn-nav">+ Novo Cliente</a>
+            </nav>
+        </header>
+
+        <main class="dashboard-main">
+
+
+            <section class="card-form">
+                <h2>Novo Serviço</h2>
+
+                <div class="form-servico">
+
+                    <div class="form-group">
+                        <label for="selectCliente">Cliente:</label>
+                        <select id="selectCliente" required>
+                            <option value="">Carregando clientes...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group form-group-descricao">
+                        <label for="inputDescricao">Descrição do Serviço:</label>
+                        <input
+                            type="text"
+                            id="inputDescricao"
+                            placeholder="Ex: Troca de tela, Instalação de sistema..."
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group form-group-btn">
+                        <label>&nbsp;</label>
+                        <button id="btnCadastrar" class="btn-cadastrar">Cadastrar</button>
+                    </div>
+
+                </div>
+
+                <p id="msgForm"></p>
+            </section>
+
+
+            <section class="lista-section">
+
+                <div class="section-title">
+                    <h2>Serviços Cadastrados</h2>
+                    <span id="totalRegistros" class="contador"></span>
+                </div>
+
+                <p id="msgCarregando" class="loading-msg">Carregando...</p>
+                <p id="msgVazio"      class="empty-msg  hidden">Nenhum serviço cadastrado ainda.</p>
+
+                <div class="tabela-wrapper hidden" id="tabelaWrapper">
+                    <table class="tabela">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>Serviço</th>
+                                <th>Status</th>
+                                <th>Atualizar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoTabela">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="lista.js"></script>
+
+</body>
+
+</html>
