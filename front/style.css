@@ -87,21 +87,14 @@ input[type="submit"]:hover {
 }
 
 
-/* ==========================================
-   UTILITÁRIOS GERAIS
-   ========================================== */
 
 .hidden {
     display: none;
 }
 
 
-/* ==========================================
-   PÁGINA DE LISTAGEM (lista.html)
-   ========================================== */
 
-/* Override: o body do index usa flex centralizado,
-   aqui precisamos de um layout de página inteira */
+
 .page-lista {
     display: block;
     padding: 24px;
@@ -117,7 +110,7 @@ input[type="submit"]:hover {
     overflow: hidden;
 }
 
-/* Cabeçalho roxo com título e botão de navegação */
+
 .dashboard-header {
     display: flex;
     justify-content: space-between;
@@ -151,9 +144,6 @@ input[type="submit"]:hover {
 }
 
 
-/* ==========================================
-   FORMULÁRIO DE NOVO SERVIÇO
-   ========================================== */
 
 .card-form {
     background: #f9f0ff;
@@ -169,12 +159,12 @@ input[type="submit"]:hover {
     font-size: 18px;
 }
 
-/* Layout horizontal dos campos do formulário */
+
 .form-servico {
     display: flex;
     gap: 16px;
     align-items: flex-end;
-    flex-wrap: wrap;  /* Quebra linha em telas menores */
+    flex-wrap: wrap;  
 }
 
 .form-group {
@@ -230,9 +220,6 @@ input[type="submit"]:hover {
 }
 
 
-/* ==========================================
-   SEÇÃO DE LISTAGEM E TABELA
-   ========================================== */
 
 .section-title {
     display: flex;
@@ -262,7 +249,7 @@ input[type="submit"]:hover {
 }
 
 .tabela-wrapper {
-    overflow-x: auto;  /* Scroll horizontal em telas pequenas */
+    overflow-x: auto; 
 }
 
 .tabela {
@@ -294,10 +281,6 @@ input[type="submit"]:hover {
 }
 
 
-/* ==========================================
-   BADGES DE STATUS
-   ========================================== */
-
 .badge-status {
     display: inline-block;
     padding: 4px 12px;
@@ -323,9 +306,6 @@ input[type="submit"]:hover {
 }
 
 
-/* ==========================================
-   CONTROLE DE ATUALIZAÇÃO DE STATUS
-   ========================================== */
 
 .acao-status {
     display: flex;

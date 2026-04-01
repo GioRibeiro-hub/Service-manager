@@ -8,11 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 
-// ==========================================
-// ROTAS DE CLIENTES
-// ==========================================
 
-// Cadastrar cliente
 app.post('/clientes', async (req, res) => {
 
     const { nome, email, telefone } = req.body;
@@ -42,7 +38,7 @@ app.post('/clientes', async (req, res) => {
     }
 });
 
-// Listar todos os clientes
+
 app.get('/clientes', async (req, res) => {
 
     try {
@@ -56,11 +52,7 @@ app.get('/clientes', async (req, res) => {
 });
 
 
-// ==========================================
-// ROTAS DE SERVIÇOS
-// ==========================================
 
-// Listar todos os serviços com dados do cliente (JOIN)
 app.get('/servicos', async (req, res) => {
 
     try {
@@ -87,7 +79,7 @@ app.get('/servicos', async (req, res) => {
     }
 });
 
-// Cadastrar novo serviço
+
 app.post('/servicos', async (req, res) => {
 
     const { cliente_id, descricao } = req.body;
@@ -115,7 +107,6 @@ app.post('/servicos', async (req, res) => {
     }
 });
 
-// Atualizar status de um serviço
 app.patch('/servicos/:id/status', async (req, res) => {
 
     const { id }     = req.params;

@@ -1,8 +1,7 @@
 // Endereço base da API
 const API_URL = 'http://localhost:3000';
 
-// Configuração dos status: valor interno → label e classe CSS
-// Centralizar aqui evita repetir essa lógica em vários lugares do código
+
 const STATUS_CONFIG = {
     pendente:     { label: 'Pendente',     classe: 'status-pendente'     },
     em_andamento: { label: 'Em Andamento', classe: 'status-em-andamento' },
@@ -10,11 +9,7 @@ const STATUS_CONFIG = {
 };
 
 
-// ==========================================
-// FORMULÁRIO — NOVO SERVIÇO
-// ==========================================
 
-// Preenche o <select> de clientes com dados da API
 async function carregarClientesNoSelect() {
 
     const selectCliente = document.getElementById('selectCliente');
@@ -41,14 +36,14 @@ async function carregarClientesNoSelect() {
     }
 }
 
-// Envia o formulário de novo serviço
+
 async function cadastrarServico() {
 
     const clienteId = document.getElementById('selectCliente').value;
     const descricao = document.getElementById('inputDescricao').value;
     const msgForm   = document.getElementById('msgForm');
 
-    // Validação básica no front antes de chamar a API
+
     if (!clienteId) {
         msgForm.textContent = 'Selecione um cliente.';
         msgForm.style.color = 'orange';
@@ -84,7 +79,7 @@ async function cadastrarServico() {
 
             setTimeout(() => { msgForm.textContent = ''; }, 3000);
 
-            // Recarrega a tabela para mostrar o novo serviço
+
             await carregarServicos();
 
         } else {
@@ -100,9 +95,6 @@ async function cadastrarServico() {
 }
 
 
-// ==========================================
-// TABELA — LISTAGEM DE SERVIÇOS
-// ==========================================
 
 async function carregarServicos() {
 
@@ -112,7 +104,7 @@ async function carregarServicos() {
     const corpoTabela    = document.getElementById('corpoTabela');
     const totalRegistros = document.getElementById('totalRegistros');
 
-    // Reseta o estado visual antes de buscar
+
     msgCarregando.classList.remove('hidden');
     tabelaWrapper.classList.add('hidden');
     msgVazio.classList.add('hidden');
@@ -132,8 +124,7 @@ async function carregarServicos() {
         totalRegistros.textContent = `${data.total} registro(s)`;
         tabelaWrapper.classList.remove('hidden');
 
-        // Gera o HTML de cada linha e junta tudo de uma vez no DOM
-        // É mais eficiente do que adicionar linha por linha com appendChild
+
         corpoTabela.innerHTML = data.servicos
             .map(servico => criarLinhaTabela(servico))
             .join('');
@@ -145,12 +136,12 @@ async function carregarServicos() {
     }
 }
 
-// Monta o HTML de uma linha da tabela a partir dos dados de um serviço
+
 function criarLinhaTabela(servico) {
 
     const config = STATUS_CONFIG[servico.status];
 
-    // Gera as opções do select, marcando o status atual como selecionado
+
     const opcoesStatus = Object.entries(STATUS_CONFIG)
         .map(([valor, info]) => `
             <option value="${valor}" ${servico.status === valor ? 'selected' : ''}>
@@ -184,7 +175,6 @@ function criarLinhaTabela(servico) {
     `;
 }
 
-// Atualiza o status de um serviço via PATCH
 async function atualizarStatus(servicoId) {
 
     const select     = document.getElementById(`select-${servicoId}`);
@@ -201,11 +191,11 @@ async function atualizarStatus(servicoId) {
 
         if (response.ok) {
 
-            // Atualiza só o badge da linha — sem recarregar a tabela inteira
+
             const badge  = document.querySelector(`#linha-${servicoId} .badge-status`);
             const config = STATUS_CONFIG[novoStatus];
 
-            // Remove a classe de cor antiga antes de adicionar a nova
+
             Object.values(STATUS_CONFIG).forEach(({ classe }) => badge.classList.remove(classe));
             badge.classList.add(config.classe);
             badge.textContent = config.label;
@@ -221,16 +211,13 @@ async function atualizarStatus(servicoId) {
 }
 
 
-// ==========================================
-// INICIALIZAÇÃO
-// ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Carrega dados ao abrir a página
+
     carregarClientesNoSelect();
     carregarServicos();
 
-    // Listener do botão de cadastrar serviço
+
     document.getElementById('btnCadastrar').addEventListener('click', cadastrarServico);
 });
