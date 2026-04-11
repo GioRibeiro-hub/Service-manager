@@ -58,6 +58,8 @@ git clone https://github.com/GioRibeiro-hub/Service-Manager.git
 
 Dentro da pasta do backend:
 
+cd back
+
 ```bash
 npm install
 ```
