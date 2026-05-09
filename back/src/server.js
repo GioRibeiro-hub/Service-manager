@@ -8,25 +8,26 @@ app.use(cors());
 app.use(express.json());
 
 
+// ==========================================
+// ROTAS DE CLIENTES
+// ==========================================
 
 app.post('/clientes', async (req, res) => {
-
     const { nome, email, telefone } = req.body;
 
     if (!nome?.trim() || !email?.trim() || !telefone?.trim()) {
         return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
     }
-
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return res.status(400).json({ error: 'Email inválido.' });
     }
 
     try {
-        const sql = `INSERT INTO clientes (nome, email, telefone) VALUES (?, ?, ?)`;
-        const [result] = await pool.query(sql, [nome.trim(), email.trim(), telefone.trim()]);
-
+        const [result] = await pool.query(
+            'INSERT INTO clientes (nome, email, telefone) VALUES (?, ?, ?)',
+            [nome.trim(), email.trim(), telefone.trim()]
+        );
         const [[cliente]] = await pool.query('SELECT * FROM clientes WHERE id = ?', [result.insertId]);
-
         res.status(201).json({ message: 'Cliente cadastrado com sucesso!', cliente });
 
     } catch (err) {
@@ -38,23 +39,73 @@ app.post('/clientes', async (req, res) => {
     }
 });
 
-
 app.get('/clientes', async (req, res) => {
-
     try {
         const [rows] = await pool.query('SELECT * FROM clientes ORDER BY nome ASC');
         res.json({ total: rows.length, clientes: rows });
-
     } catch (err) {
         console.error('Erro ao buscar clientes:', err);
         res.status(500).json({ error: 'Erro interno ao buscar clientes.' });
     }
 });
 
+app.put('/clientes/:id', async (req, res) => {
+    const { id }                  = req.params;
+    const { nome, email, telefone } = req.body;
 
+    if (!nome?.trim() || !email?.trim() || !telefone?.trim()) {
+        return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({ error: 'Email inválido.' });
+    }
+
+    try {
+        const [result] = await pool.query(
+            'UPDATE clientes SET nome = ?, email = ?, telefone = ? WHERE id = ?',
+            [nome.trim(), email.trim(), telefone.trim(), id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Cliente não encontrado.' });
+        }
+
+        const [[cliente]] = await pool.query('SELECT * FROM clientes WHERE id = ?', [id]);
+        res.json({ message: 'Cliente atualizado com sucesso!', cliente });
+
+    } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ error: 'Este email já está cadastrado.' });
+        }
+        console.error('Erro ao atualizar cliente:', err);
+        res.status(500).json({ error: 'Erro interno ao atualizar cliente.' });
+    }
+});
+
+app.delete('/clientes/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const [result] = await pool.query('DELETE FROM clientes WHERE id = ?', [id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Cliente não encontrado.' });
+        }
+
+        res.json({ message: 'Cliente excluído com sucesso!' });
+
+    } catch (err) {
+        console.error('Erro ao excluir cliente:', err);
+        res.status(500).json({ error: 'Erro interno ao excluir cliente.' });
+    }
+});
+
+
+// ==========================================
+// ROTAS DE SERVIÇOS
+// ==========================================
 
 app.get('/servicos', async (req, res) => {
-
     try {
         const [rows] = await pool.query(`
             SELECT
@@ -70,18 +121,14 @@ app.get('/servicos', async (req, res) => {
             INNER JOIN clientes c ON s.cliente_id = c.id
             ORDER BY s.criado_em DESC
         `);
-
         res.json({ total: rows.length, servicos: rows });
-
     } catch (err) {
         console.error('Erro ao buscar serviços:', err);
         res.status(500).json({ error: 'Erro interno ao buscar serviços.' });
     }
 });
 
-
 app.post('/servicos', async (req, res) => {
-
     const { cliente_id, descricao } = req.body;
 
     if (!cliente_id || !descricao?.trim()) {
@@ -93,12 +140,7 @@ app.post('/servicos', async (req, res) => {
             'INSERT INTO servicos (cliente_id, descricao) VALUES (?, ?)',
             [cliente_id, descricao.trim()]
         );
-
-        const [[servico]] = await pool.query(
-            'SELECT * FROM servicos WHERE id = ?',
-            [result.insertId]
-        );
-
+        const [[servico]] = await pool.query('SELECT * FROM servicos WHERE id = ?', [result.insertId]);
         res.status(201).json({ message: 'Serviço cadastrado com sucesso!', servico });
 
     } catch (err) {
@@ -108,12 +150,10 @@ app.post('/servicos', async (req, res) => {
 });
 
 app.patch('/servicos/:id/status', async (req, res) => {
-
     const { id }     = req.params;
     const { status } = req.body;
 
     const statusValidos = ['pendente', 'em_andamento', 'concluido'];
-
     if (!statusValidos.includes(status)) {
         return res.status(400).json({ error: 'Status inválido.' });
     }
@@ -123,11 +163,9 @@ app.patch('/servicos/:id/status', async (req, res) => {
             'UPDATE servicos SET status = ? WHERE id = ?',
             [status, id]
         );
-
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Serviço não encontrado.' });
         }
-
         res.json({ message: 'Status atualizado com sucesso!' });
 
     } catch (err) {

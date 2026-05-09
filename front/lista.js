@@ -1,6 +1,4 @@
-// Endereço base da API
 const API_URL = 'http://localhost:3000';
-
 
 const STATUS_CONFIG = {
     pendente:     { label: 'Pendente',     classe: 'status-pendente'     },
@@ -9,9 +7,11 @@ const STATUS_CONFIG = {
 };
 
 
+// ==========================================
+// FORMULÁRIO — NOVO SERVIÇO
+// ==========================================
 
 async function carregarClientesNoSelect() {
-
     const selectCliente = document.getElementById('selectCliente');
 
     try {
@@ -23,7 +23,6 @@ async function carregarClientesNoSelect() {
             return;
         }
 
-        // Monta as opções dinamicamente
         const opcoes = data.clientes
             .map(c => `<option value="${c.id}">${c.nome}</option>`)
             .join('');
@@ -36,13 +35,10 @@ async function carregarClientesNoSelect() {
     }
 }
 
-
 async function cadastrarServico() {
-
     const clienteId = document.getElementById('selectCliente').value;
     const descricao = document.getElementById('inputDescricao').value;
     const msgForm   = document.getElementById('msgForm');
-
 
     if (!clienteId) {
         msgForm.textContent = 'Selecione um cliente.';
@@ -61,7 +57,7 @@ async function cadastrarServico() {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({
-                cliente_id: Number(clienteId), // Garantia: envia como número, não string
+                cliente_id: Number(clienteId),
                 descricao:  descricao.trim(),
             }),
         });
@@ -69,19 +65,15 @@ async function cadastrarServico() {
         const data = await response.json();
 
         if (response.ok) {
-
             msgForm.textContent = data.message;
             msgForm.style.color = 'green';
 
-            // Limpa os campos do formulário
             document.getElementById('selectCliente').value  = '';
             document.getElementById('inputDescricao').value = '';
 
             setTimeout(() => { msgForm.textContent = ''; }, 3000);
 
-
             await carregarServicos();
-
         } else {
             msgForm.textContent = data.error;
             msgForm.style.color = 'red';
@@ -95,15 +87,16 @@ async function cadastrarServico() {
 }
 
 
+// ==========================================
+// TABELA — LISTAGEM DE SERVIÇOS
+// ==========================================
 
 async function carregarServicos() {
-
     const msgCarregando  = document.getElementById('msgCarregando');
     const msgVazio       = document.getElementById('msgVazio');
     const tabelaWrapper  = document.getElementById('tabelaWrapper');
     const corpoTabela    = document.getElementById('corpoTabela');
     const totalRegistros = document.getElementById('totalRegistros');
-
 
     msgCarregando.classList.remove('hidden');
     tabelaWrapper.classList.add('hidden');
@@ -123,11 +116,7 @@ async function carregarServicos() {
 
         totalRegistros.textContent = `${data.total} registro(s)`;
         tabelaWrapper.classList.remove('hidden');
-
-
-        corpoTabela.innerHTML = data.servicos
-            .map(servico => criarLinhaTabela(servico))
-            .join('');
+        corpoTabela.innerHTML = data.servicos.map(criarLinhaTabela).join('');
 
     } catch (error) {
         msgCarregando.textContent = 'Erro ao conectar com o servidor.';
@@ -136,11 +125,8 @@ async function carregarServicos() {
     }
 }
 
-
 function criarLinhaTabela(servico) {
-
     const config = STATUS_CONFIG[servico.status];
-
 
     const opcoesStatus = Object.entries(STATUS_CONFIG)
         .map(([valor, info]) => `
@@ -176,7 +162,6 @@ function criarLinhaTabela(servico) {
 }
 
 async function atualizarStatus(servicoId) {
-
     const select     = document.getElementById(`select-${servicoId}`);
     const novoStatus = select.value;
 
@@ -190,16 +175,12 @@ async function atualizarStatus(servicoId) {
         const data = await response.json();
 
         if (response.ok) {
-
-
             const badge  = document.querySelector(`#linha-${servicoId} .badge-status`);
             const config = STATUS_CONFIG[novoStatus];
-
 
             Object.values(STATUS_CONFIG).forEach(({ classe }) => badge.classList.remove(classe));
             badge.classList.add(config.classe);
             badge.textContent = config.label;
-
         } else {
             alert(data.error || 'Erro ao atualizar status.');
         }
@@ -211,13 +192,13 @@ async function atualizarStatus(servicoId) {
 }
 
 
+// ==========================================
+// INICIALIZAÇÃO
+// ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-
-
     carregarClientesNoSelect();
     carregarServicos();
-
 
     document.getElementById('btnCadastrar').addEventListener('click', cadastrarServico);
 });

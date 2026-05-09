@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Manager - Clientes</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="page-lista">
+
+    <div class="dashboard">
+
+        <header class="dashboard-header">
+            <h1>Service Manager</h1>
+            <nav class="header-nav">
+                <a href="index.html"  class="btn-nav">+ Novo Cliente</a>
+                <a href="lista.html"  class="btn-nav btn-nav-outline">Ver Serviços</a>
+            </nav>
+        </header>
+
+        <main class="dashboard-main">
+
+            <div class="section-title">
+                <h2>Clientes Cadastrados</h2>
+                <span id="totalClientes" class="contador"></span>
+            </div>
+
+            <p id="msgCarregando" class="loading-msg">Carregando...</p>
+            <p id="msgVazio"      class="empty-msg hidden">Nenhum cliente cadastrado ainda.</p>
+
+            <div class="tabela-wrapper hidden" id="tabelaWrapper">
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabela">
+                        <!-- Preenchido pelo clientes.js -->
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!--
+        MODAL DE EDIÇÃO
+        Fica escondido (classe .hidden) e aparece quando o usuário clica em "Editar".
+        O overlay escuro fica atrás da caixa branca (.modal-box).
+    -->
+    <div id="modal" class="modal-overlay hidden">
+        <div class="modal-box">
+
+            <h3>Editar Cliente</h3>
+
+            <!-- Campo oculto que guarda o ID do cliente sendo editado -->
+            <input type="hidden" id="editId">
+
+            <div class="form-group-modal">
+                <label for="editNome">Nome Completo:</label>
+                <input type="text"  id="editNome"     placeholder="Ex: João da Silva">
+            </div>
+
+            <div class="form-group-modal">
+                <label for="editEmail">Email:</label>
+                <input type="email" id="editEmail"    placeholder="Ex: joao@email.com">
+            </div>
+
+            <div class="form-group-modal">
+                <label for="editTelefone">Telefone:</label>
+                <input type="tel"   id="editTelefone" placeholder="(11) 99999-9999">
+            </div>
+
+            <p id="msgModal"></p>
+
+            <div class="modal-acoes">
+                <button id="btnCancelar" class="btn-cancelar">Cancelar</button>
+                <button id="btnSalvar"   class="btn-salvar">Salvar Alterações</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script src="clientes.js"></script>
+
+</body>
+
+</html>

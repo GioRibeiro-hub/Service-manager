@@ -86,14 +86,18 @@ input[type="submit"]:hover {
     font-weight:bold;
 }
 
-
+/* ==========================================
+   UTILITÁRIOS GERAIS
+   ========================================== */
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 
-
+/* ==========================================
+   PÁGINA DE LISTAGEM (lista.html / clientes.html)
+   ========================================== */
 
 .page-lista {
     display: block;
@@ -110,7 +114,6 @@ input[type="submit"]:hover {
     overflow: hidden;
 }
 
-
 .dashboard-header {
     display: flex;
     justify-content: space-between;
@@ -124,6 +127,12 @@ input[type="submit"]:hover {
     margin: 0;
 }
 
+/* Navegação com múltiplos botões no header */
+.header-nav {
+    display: flex;
+    gap: 10px;
+}
+
 .btn-nav {
     background: white;
     color: #740FFF;
@@ -133,10 +142,22 @@ input[type="submit"]:hover {
     font-weight: bold;
     font-size: 14px;
     transition: background 0.2s;
+    white-space: nowrap;
 }
 
 .btn-nav:hover {
     background: #f0e0ff;
+}
+
+/* Variante secundária: fundo transparente, borda branca */
+.btn-nav-outline {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.btn-nav-outline:hover {
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .dashboard-main {
@@ -144,6 +165,9 @@ input[type="submit"]:hover {
 }
 
 
+/* ==========================================
+   FORMULÁRIO DE NOVO SERVIÇO (lista.html)
+   ========================================== */
 
 .card-form {
     background: #f9f0ff;
@@ -159,12 +183,11 @@ input[type="submit"]:hover {
     font-size: 18px;
 }
 
-
 .form-servico {
     display: flex;
     gap: 16px;
     align-items: flex-end;
-    flex-wrap: wrap;  
+    flex-wrap: wrap;
 }
 
 .form-group {
@@ -220,6 +243,9 @@ input[type="submit"]:hover {
 }
 
 
+/* ==========================================
+   SEÇÃO DE LISTAGEM E TABELA
+   ========================================== */
 
 .section-title {
     display: flex;
@@ -231,6 +257,10 @@ input[type="submit"]:hover {
 .section-title h2 {
     margin: 0;
     color: #333;
+}
+
+.lista-section {
+    margin-top: 16px;
 }
 
 .contador {
@@ -249,7 +279,7 @@ input[type="submit"]:hover {
 }
 
 .tabela-wrapper {
-    overflow-x: auto; 
+    overflow-x: auto;
 }
 
 .tabela {
@@ -281,6 +311,49 @@ input[type="submit"]:hover {
 }
 
 
+/* ==========================================
+   BOTÕES DE AÇÃO (Editar / Excluir)
+   ========================================== */
+
+.acoes {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-editar,
+.btn-excluir {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-editar {
+    background: #CCE5FF;
+    color: #004085;
+}
+
+.btn-editar:hover {
+    background: #b8d4f5;
+}
+
+.btn-excluir {
+    background: #F8D7DA;
+    color: #721c24;
+}
+
+.btn-excluir:hover {
+    background: #f0b8bc;
+}
+
+
+/* ==========================================
+   BADGES DE STATUS (lista.html)
+   ========================================== */
+
 .badge-status {
     display: inline-block;
     padding: 4px 12px;
@@ -304,8 +377,6 @@ input[type="submit"]:hover {
     background: #D4EDDA;
     color: #155724;
 }
-
-
 
 .acao-status {
     display: flex;
@@ -337,5 +408,116 @@ input[type="submit"]:hover {
 }
 
 .btn-atualizar:hover {
+    background: #191EFF;
+}
+
+
+/* ==========================================
+   MODAL DE EDIÇÃO
+   ========================================== */
+
+/*
+    O overlay cobre a tela inteira com um fundo semitransparente escuro.
+    position: fixed garante que fica por cima de tudo, independente do scroll.
+*/
+.modal-overlay {
+    position: fixed;
+    inset: 0;                          /* Atalho para top/right/bottom/left: 0 */
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;                     /* Fica na frente de todos os outros elementos */
+}
+
+.modal-box {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-box h3 {
+    margin: 0 0 20px 0;
+    color: #740FFF;
+    font-size: 20px;
+}
+
+.form-group-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.form-group-modal label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #444;
+    text-align: left;
+    margin: 0;
+}
+
+.form-group-modal input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.form-group-modal input:focus {
+    outline: none;
+    border-color: #740FFF;
+    box-shadow: 0 0 0 2px rgba(116, 15, 255, 0.15);
+}
+
+#msgModal {
+    font-size: 13px;
+    font-weight: bold;
+    margin: 8px 0;
+    min-height: 18px;
+}
+
+.modal-acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-cancelar {
+    background: #eee;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-cancelar:hover {
+    background: #ddd;
+}
+
+.btn-salvar {
+    background: #740FFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-salvar:hover {
     background: #191EFF;
 }
